@@ -108,9 +108,13 @@ export class MetricsCalculator {
     const cancelledTrips = tripsArray.filter(t => t.status === 'cancelled').length;
     const activeTrips = tripsArray.filter(t => t.status === 'in_progress' || t.status === 'started').length;
 
-    // Progress milestones
-    const progress50Plus = tripsArray.filter(t => t.progress >= 50).length;
-    const progress80Plus = tripsArray.filter(t => t.progress >= 80).length;
+    // Progress milestones (only count active trips, not completed/cancelled)
+    const progress50Plus = tripsArray.filter(t => 
+      (t.status === 'in_progress' || t.status === 'started') && t.progress >= 50
+    ).length;
+    const progress80Plus = tripsArray.filter(t => 
+      (t.status === 'in_progress' || t.status === 'started') && t.progress >= 80
+    ).length;
 
     // Total distance
     const totalDistance = tripsArray.reduce((sum, t) => sum + t.distance, 0);
