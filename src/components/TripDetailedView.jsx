@@ -18,61 +18,61 @@ export default function TripDetailedView({ tripId }) {
   const speedChartConfig = getSpeedChartConfig(events);
 
   return (
-    <div className="space-y-4">
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {/* Header */}
       <Card>
         <CardContent>
-          <Box className="flex items-start justify-between">
-            <div>
-              <Typography variant="h5" className="font-bold mb-2">
+          <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
                 {tripMetadata.name}
               </Typography>
-              <Typography variant="body2" color="textSecondary">
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {tripMetadata.id}
               </Typography>
-            </div>
+            </Box>
             <Chip
               label={metrics.status?.replace('_', ' ').toUpperCase()}
               color={getStatusColor(metrics.status)}
-              className="font-semibold"
+              sx={{ fontWeight: 600 }}
             />
           </Box>
 
-          <Divider className="my-4" />
+          <Divider sx={{ my: 3 }} />
 
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="caption" color="textSecondary">
+            <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                 Distance Traveled
               </Typography>
-              <Typography variant="h6" className="font-semibold">
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
                 {formatDistance(metrics.distance || 0)}
               </Typography>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="caption" color="textSecondary">
+            <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                 Duration
               </Typography>
-              <Typography variant="h6" className="font-semibold">
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
                 {formatDuration(metrics.duration || 0)}
               </Typography>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="caption" color="textSecondary">
+            <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                 Current Speed
               </Typography>
-              <Typography variant="h6" className="font-semibold">
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
                 {Math.round(metrics.currentSpeed || 0)} km/h
               </Typography>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="caption" color="textSecondary">
+            <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                 Progress
               </Typography>
-              <Typography variant="h6" className="font-semibold">
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
                 {Math.round(metrics.progress || 0)}%
               </Typography>
             </Grid>
@@ -82,10 +82,10 @@ export default function TripDetailedView({ tripId }) {
 
       {/* Charts */}
       <Grid container spacing={3}>
-        <Grid item xs={12} lg={7}>
+        <Grid item size={{ xs: 12, lg: 7 }}>
           <Card>
             <CardContent>
-              <Typography variant="h6" className="font-semibold mb-4">
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
                 Distance Over Time
               </Typography>
               {distanceChartConfig.series[0].data.length > 0 ? (
@@ -93,21 +93,21 @@ export default function TripDetailedView({ tripId }) {
                   options={distanceChartConfig.options}
                   series={distanceChartConfig.series}
                   type="area"
-                  height={250}
+                  height={280}
                 />
               ) : (
-                <Box className="h-[250px] flex items-center justify-center text-gray-400">
-                  <Typography>No distance data available</Typography>
+                <Box sx={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Typography sx={{ color: 'text.disabled' }}>No distance data available</Typography>
                 </Box>
               )}
             </CardContent>
           </Card>
         </Grid>
 
-        <Grid item xs={12} lg={5}>
+        <Grid item size={{ xs: 12, lg: 5 }}>
           <Card>
             <CardContent>
-              <Typography variant="h6" className="font-semibold mb-4">
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
                 Speed Profile
               </Typography>
               {speedChartConfig.series[0].data.length > 0 ? (
@@ -115,11 +115,11 @@ export default function TripDetailedView({ tripId }) {
                   options={speedChartConfig.options}
                   series={speedChartConfig.series}
                   type="line"
-                  height={250}
+                  height={280}
                 />
               ) : (
-                <Box className="h-[250px] flex items-center justify-center text-gray-400">
-                  <Typography>No speed data available</Typography>
+                <Box sx={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Typography sx={{ color: 'text.disabled' }}>No speed data available</Typography>
                 </Box>
               )}
             </CardContent>
@@ -130,22 +130,27 @@ export default function TripDetailedView({ tripId }) {
       {/* Event Type Summary */}
       <Card>
         <CardContent>
-          <Typography variant="h6" className="font-semibold mb-3">
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
             Event Summary
           </Typography>
-          <Box className="flex flex-wrap gap-2">
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
             {Object.entries(eventTypeCounts).map(([type, count]) => (
               <Chip
                 key={type}
                 label={`${type.replace(/_/g, ' ')}: ${count}`}
-                variant="outlined"
+                sx={{
+                  bgcolor: 'rgba(115, 103, 240, 0.12)',
+                  color: 'primary.main',
+                  fontWeight: 500,
+                  border: 'none'
+                }}
                 size="small"
               />
             ))}
           </Box>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 }
 

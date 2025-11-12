@@ -43,15 +43,26 @@ export default function PlaybackControls() {
   ];
 
   return (
-    <Card className="sticky top-4 z-10 shadow-lg">
+    <Card 
+      sx={{ 
+        position: 'sticky',
+        top: 16,
+        zIndex: 10,
+        boxShadow: '0px 4px 16px rgba(115, 103, 240, 0.16)'
+      }}
+    >
       <CardContent>
-        <Box className="flex items-center gap-4">
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, flexWrap: 'wrap' }}>
           {/* Playback Buttons */}
-          <Box className="flex items-center gap-2">
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconButton
               onClick={reset}
-              color="primary"
-              className="hover:bg-blue-50"
+              sx={{
+                color: 'primary.main',
+                '&:hover': {
+                  bgcolor: 'rgba(115, 103, 240, 0.08)'
+                }
+              }}
               title="Reset"
             >
               <Replay />
@@ -59,14 +70,14 @@ export default function PlaybackControls() {
 
             <IconButton
               onClick={isPlaying ? pause : play}
-              color="primary"
               size="large"
-              className="bg-blue-500 hover:bg-blue-600 text-white"
               sx={{
-                backgroundColor: '#3b82f6',
+                background: 'linear-gradient(135deg, #7367F0 0%, #9E95F5 100%)',
                 color: 'white',
+                boxShadow: '0px 4px 12px rgba(115, 103, 240, 0.4)',
                 '&:hover': {
-                  backgroundColor: '#2563eb'
+                  background: 'linear-gradient(135deg, #5E50EE 0%, #7367F0 100%)',
+                  boxShadow: '0px 6px 16px rgba(115, 103, 240, 0.6)'
                 }
               }}
             >
@@ -75,16 +86,28 @@ export default function PlaybackControls() {
           </Box>
 
           {/* Progress Slider */}
-          <Box className="flex-1">
-            <Box className="flex justify-between items-center mb-1">
-              <Typography variant="caption" color="textSecondary">
+          <Box sx={{ flex: 1, minWidth: 250 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  color: 'text.secondary',
+                  fontWeight: 500,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}
+              >
                 Simulation Progress
               </Typography>
               <Chip
                 label={`${Math.round(progress)}%`}
                 size="small"
-                color="primary"
-                variant="outlined"
+                sx={{
+                  bgcolor: 'rgba(115, 103, 240, 0.12)',
+                  color: 'primary.main',
+                  fontWeight: 600,
+                  border: 'none'
+                }}
               />
             </Box>
             <Slider
@@ -95,26 +118,44 @@ export default function PlaybackControls() {
               step={0.1}
               sx={{
                 '& .MuiSlider-thumb': {
-                  width: 16,
-                  height: 16
+                  width: 18,
+                  height: 18,
+                  boxShadow: '0px 2px 8px rgba(115, 103, 240, 0.3)'
+                },
+                '& .MuiSlider-track': {
+                  height: 6,
+                  background: 'linear-gradient(90deg, #7367F0 0%, #9E95F5 100%)'
+                },
+                '& .MuiSlider-rail': {
+                  height: 6,
+                  bgcolor: 'rgba(115, 103, 240, 0.12)'
                 }
               }}
             />
             {currentTime && (
-              <Typography variant="caption" color="textSecondary">
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  color: 'text.secondary',
+                  fontWeight: 500
+                }}
+              >
                 Current Time: {formatTime(currentTime)}
               </Typography>
             )}
           </Box>
 
           {/* Speed Control */}
-          <Box className="flex items-center gap-2 min-w-[150px]">
-            <Speed className="text-gray-600" />
-            <FormControl size="small" className="flex-1">
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 150 }}>
+            <Speed sx={{ color: 'primary.main' }} />
+            <FormControl size="small" sx={{ flex: 1 }}>
               <Select
                 value={playbackSpeed}
                 onChange={(e) => changeSpeed(e.target.value)}
-                sx={{ minWidth: 100 }}
+                sx={{ 
+                  minWidth: 100,
+                  fontWeight: 600
+                }}
               >
                 {speedOptions.map(option => (
                   <MenuItem key={option.value} value={option.value}>
@@ -128,9 +169,23 @@ export default function PlaybackControls() {
           {/* Status Indicator */}
           <Chip
             label={isPlaying ? 'Playing' : 'Paused'}
-            color={isPlaying ? 'success' : 'default'}
             icon={isPlaying ? <PlayArrow /> : <Pause />}
-            variant="outlined"
+            sx={{
+              fontWeight: 600,
+              ...(isPlaying ? {
+                bgcolor: 'rgba(40, 199, 111, 0.12)',
+                color: '#28C76F',
+                '& .MuiChip-icon': {
+                  color: '#28C76F'
+                }
+              } : {
+                bgcolor: 'rgba(168, 170, 174, 0.12)',
+                color: 'text.secondary',
+                '& .MuiChip-icon': {
+                  color: 'text.secondary'
+                }
+              })
+            }}
           />
         </Box>
       </CardContent>

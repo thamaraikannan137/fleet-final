@@ -28,7 +28,7 @@ export function getBaseChartOptions(isDarkMode = false) {
 }
 
 /**
- * Fleet progress donut chart config
+ * Fleet progress donut chart config - Materio colors
  */
 export function getFleetProgressChartConfig(fleetMetrics) {
   return {
@@ -41,27 +41,41 @@ export function getFleetProgressChartConfig(fleetMetrics) {
       ...getBaseChartOptions(),
       chart: {
         type: 'donut',
-        height: 280
+        height: 300
       },
       labels: ['Completed', 'Active', 'Cancelled'],
-      colors: ['#10b981', '#3b82f6', '#ef4444'],
+      colors: ['#28C76F', '#00CFE8', '#EA5455'],
       legend: {
-        position: 'bottom'
+        position: 'bottom',
+        fontSize: '14px',
+        fontWeight: 500,
+        markers: {
+          radius: 4
+        }
       },
       dataLabels: {
-        enabled: true
+        enabled: true,
+        style: {
+          fontWeight: 600
+        }
       },
       plotOptions: {
         pie: {
           donut: {
-            size: '65%',
+            size: '70%',
             labels: {
               show: true,
               total: {
                 show: true,
                 label: 'Total Trips',
                 fontSize: '16px',
-                fontWeight: 600
+                fontWeight: 600,
+                color: '#4B465C'
+              },
+              value: {
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#7367F0'
               }
             }
           }
@@ -72,7 +86,7 @@ export function getFleetProgressChartConfig(fleetMetrics) {
 }
 
 /**
- * Trip progress radial bar config
+ * Trip progress radial bar config - Materio colors
  */
 export function getTripProgressChartConfig(progress, tripName) {
   return {
@@ -95,22 +109,23 @@ export function getTripProgressChartConfig(progress, tripName) {
             value: {
               fontSize: '24px',
               fontWeight: 'bold',
-              formatter: (val) => `${val}%`
+              formatter: (val) => `${val}%`,
+              color: '#7367F0'
             }
           },
           track: {
-            background: '#e5e7eb'
+            background: 'rgba(115, 103, 240, 0.12)'
           }
         }
       },
-      colors: ['#3b82f6'],
+      colors: ['#7367F0'],
       labels: [tripName]
     }
   };
 }
 
 /**
- * Distance timeline chart config
+ * Distance timeline chart config - Materio colors
  */
 export function getDistanceTimelineChartConfig(events) {
   const data = events
@@ -139,15 +154,17 @@ export function getDistanceTimelineChartConfig(events) {
       },
       stroke: {
         curve: 'smooth',
-        width: 2
+        width: 3,
+        colors: ['#7367F0']
       },
-      colors: ['#3b82f6'],
+      colors: ['#7367F0'],
       fill: {
         type: 'gradient',
         gradient: {
           shadeIntensity: 1,
-          opacityFrom: 0.4,
-          opacityTo: 0.1
+          opacityFrom: 0.5,
+          opacityTo: 0.1,
+          stops: [0, 90, 100]
         }
       },
       xaxis: {
@@ -160,20 +177,26 @@ export function getDistanceTimelineChartConfig(events) {
       },
       yaxis: {
         title: {
-          text: 'Distance (km)'
+          text: 'Distance (km)',
+          style: {
+            fontWeight: 600
+          }
         }
       },
       tooltip: {
         x: {
           format: 'MMM dd, HH:mm'
         }
+      },
+      grid: {
+        borderColor: 'rgba(75, 70, 92, 0.12)'
       }
     }
   };
 }
 
 /**
- * Speed chart config
+ * Speed chart config - Materio colors
  */
 export function getSpeedChartConfig(events) {
   const data = events
@@ -199,9 +222,10 @@ export function getSpeedChartConfig(events) {
       },
       stroke: {
         curve: 'smooth',
-        width: 2
+        width: 3,
+        colors: ['#00CFE8']
       },
-      colors: ['#8b5cf6'],
+      colors: ['#00CFE8'],
       xaxis: {
         type: 'datetime',
         labels: {
@@ -212,20 +236,26 @@ export function getSpeedChartConfig(events) {
       },
       yaxis: {
         title: {
-          text: 'Speed (km/h)'
+          text: 'Speed (km/h)',
+          style: {
+            fontWeight: 600
+          }
         }
       },
       tooltip: {
         x: {
           format: 'MMM dd, HH:mm'
         }
+      },
+      grid: {
+        borderColor: 'rgba(75, 70, 92, 0.12)'
       }
     }
   };
 }
 
 /**
- * Fleet distance comparison bar chart
+ * Fleet distance comparison bar chart - Materio colors
  */
 export function getFleetDistanceChartConfig(tripsWithMetadata) {
   const tripNames = tripsWithMetadata.map(t => t.name?.split(' ').slice(0, 2).join(' ') || t.id);
@@ -246,6 +276,7 @@ export function getFleetDistanceChartConfig(tripsWithMetadata) {
         bar: {
           horizontal: false,
           borderRadius: 8,
+          columnWidth: '50%',
           dataLabels: {
             position: 'top'
           }
@@ -256,21 +287,45 @@ export function getFleetDistanceChartConfig(tripsWithMetadata) {
         formatter: (val) => `${val} km`,
         offsetY: -20,
         style: {
-          fontSize: '12px'
+          fontSize: '12px',
+          fontWeight: 600,
+          colors: ['#4B465C']
         }
       },
-      colors: ['#3b82f6'],
+      colors: ['#7367F0'],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'light',
+          type: 'vertical',
+          shadeIntensity: 0.4,
+          gradientToColors: ['#9E95F5'],
+          inverseColors: false,
+          opacityFrom: 1,
+          opacityTo: 0.8,
+          stops: [0, 100]
+        }
+      },
       xaxis: {
         categories: tripNames,
         labels: {
           rotate: -45,
-          rotateAlways: true
+          rotateAlways: true,
+          style: {
+            fontWeight: 500
+          }
         }
       },
       yaxis: {
         title: {
-          text: 'Distance (km)'
+          text: 'Distance (km)',
+          style: {
+            fontWeight: 600
+          }
         }
+      },
+      grid: {
+        borderColor: 'rgba(75, 70, 92, 0.12)'
       }
     }
   };

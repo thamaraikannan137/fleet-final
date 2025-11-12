@@ -12,7 +12,8 @@ import {
   Grid,
   CircularProgress,
   Alert,
-  Typography
+  Typography,
+  Chip
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -28,9 +29,9 @@ import TripDetailedView from '../components/TripDetailedView';
 
 function TabPanel({ children, value, index }) {
   return (
-    <div hidden={value !== index} className="py-6">
+    <Box hidden={value !== index} >
       {value === index && children}
-    </div>
+    </Box>
   );
 }
 
@@ -46,10 +47,10 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <Box className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Box className="text-center">
+      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default' }}>
+        <Box sx={{ textAlign: 'center' }}>
           <CircularProgress size={60} />
-          <Typography variant="h6" className="mt-4 text-gray-600">
+          <Typography variant="h6" sx={{ mt: 3, color: 'text.secondary' }}>
             Loading Fleet Data...
           </Typography>
         </Box>
@@ -59,9 +60,9 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <Box className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <Alert severity="error" className="max-w-md">
-          <Typography variant="h6" className="mb-2">
+      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default', p: 2 }}>
+        <Alert severity="error" sx={{ maxWidth: 'md' }}>
+          <Typography variant="h6" sx={{ mb: 1 }}>
             Failed to Load Fleet Data
           </Typography>
           <Typography variant="body2">
@@ -75,44 +76,99 @@ export default function Dashboard() {
   const tripMetadata = getTripMetadata();
 
   return (
-    <Box className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <Box className="bg-white shadow-sm border-b sticky top-0 z-20">
-        <Container maxWidth="xl" className="py-4">
-          <Box className="flex items-center justify-between">
-            <div>
-              <Typography variant="h4" className="font-bold text-gray-900 flex items-center gap-2">
-                <DirectionsCar className="text-blue-500" fontSize="large" />
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+      {/* Header with Gradient */}
+      <Box 
+        sx={{ 
+          background: 'linear-gradient(135deg, #7367F0 0%, #9E95F5 100%)',
+          boxShadow: '0px 4px 8px -4px rgba(115, 103, 240, 0.42)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 20,
+        }}
+      >
+        <Container maxWidth="xl" sx={{ py: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box>
+              <Typography 
+                variant="h4" 
+                sx={{ 
+                  fontWeight: 700, 
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  mb: 0.5
+                }}
+              >
+                <DirectionsCar sx={{ fontSize: 36 }} />
                 Fleet Tracking Dashboard
               </Typography>
-              <Typography variant="body2" className="text-gray-600 mt-1">
-                Real-time monitoring and analytics
+              <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.85)' }}>
+                Real-time monitoring and analytics for your fleet
               </Typography>
-            </div>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+              <Chip 
+                label="Live"
+                sx={{ 
+                  bgcolor: 'rgba(255, 255, 255, 0.2)',
+                  color: 'white',
+                  fontWeight: 600,
+                  '&::before': {
+                    content: '""',
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    bgcolor: '#28C76F',
+                    marginRight: 1,
+                    marginLeft: 1,
+                    display: 'inline-block',
+                    animation: 'pulse 2s infinite',
+                  }
+                }}
+              />
+            </Box>
           </Box>
         </Container>
       </Box>
 
-      <Container maxWidth="xl" className="py-6">
+      <Container maxWidth="xl" sx={{ py: 4 }}>
         {/* Playback Controls */}
-        <Box className="mb-6">
+        <Box sx={{ mb: 3 }}>
           <PlaybackControls />
         </Box>
 
         {/* Navigation Tabs */}
-        <Box className="bg-white rounded-lg shadow-sm mb-6">
+        <Box 
+          sx={{ 
+            bgcolor: 'background.paper',
+            borderRadius: 2,
+            boxShadow: 1,
+            mb: 3,
+            overflow: 'hidden'
+          }}
+        >
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
             variant="scrollable"
             scrollButtons="auto"
             sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
               '& .MuiTab-root': {
                 textTransform: 'none',
-                fontSize: '1rem',
-                fontWeight: 500
+                fontSize: '0.9375rem',
+                fontWeight: 500,
+                minHeight: 48,
+                color: 'text.secondary',
+                '&.Mui-selected': {
+                  color: 'primary.main',
+                  fontWeight: 600,
+                },
+              },
+              '& .MuiTabs-indicator': {
+                height: 3,
+                borderRadius: '3px 3px 0 0',
               }
             }}
           >
@@ -142,21 +198,36 @@ export default function Dashboard() {
         <TabPanel value={activeTab} index={1}>
           {selectedTrip ? (
             <Box>
-              <button
+              <Box
+                component="button"
                 onClick={() => setSelectedTrip(null)}
-                className="mb-4 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                sx={{
+                  mb: 3,
+                  px: 3,
+                  py: 1.5,
+                  color: 'primary.main',
+                  bgcolor: 'rgba(115, 103, 240, 0.08)',
+                  border: 'none',
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    bgcolor: 'rgba(115, 103, 240, 0.12)'
+                  }
+                }}
               >
                 ← Back to All Trips
-              </button>
+              </Box>
               <TripDetailedView tripId={selectedTrip} />
             </Box>
           ) : (
             <Grid container spacing={3}>
               {tripMetadata.map((trip) => (
-                <Grid item xs={12} md={6} lg={4} key={trip.id}>
-                  <div onClick={() => setSelectedTrip(trip.id)} className="cursor-pointer">
+                <Grid item size={{ xs: 12, md: 6, lg: 4 }} key={trip.id}>
+                  <Box onClick={() => setSelectedTrip(trip.id)} sx={{ cursor: 'pointer' }}>
                     <TripCard tripId={trip.id} />
-                  </div>
+                  </Box>
                 </Grid>
               ))}
             </Grid>
@@ -165,27 +236,17 @@ export default function Dashboard() {
 
         <TabPanel value={activeTab} index={2}>
           <Grid container spacing={3}>
-            <Grid item xs={12} lg={8}>
+            <Grid item size={12}>
               <EventTimeline limit={50} />
-            </Grid>
-            <Grid item xs={12} lg={4}>
-              <Box className="space-y-4">
-                <Typography variant="h6" className="font-semibold mb-4">
-                  Quick Trip Status
-                </Typography>
-                {tripMetadata.map((trip) => (
-                  <TripCard key={trip.id} tripId={trip.id} />
-                ))}
-              </Box>
-            </Grid>
+            </Grid>            
           </Grid>
         </TabPanel>
       </Container>
 
       {/* Footer */}
-      <Box className="bg-white border-t mt-12 py-6">
+      <Box sx={{ bgcolor: 'background.paper', borderTop: 1, borderColor: 'divider', mt: 8, py: 3 }}>
         <Container maxWidth="xl">
-          <Typography variant="body2" className="text-center text-gray-600">
+          <Typography variant="body2" sx={{ textAlign: 'center', color: 'text.secondary' }}>
             Fleet Tracking Dashboard © 2025 | Real-time Fleet Management System
           </Typography>
         </Container>
