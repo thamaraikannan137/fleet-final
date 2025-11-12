@@ -64,7 +64,7 @@ export default function TripDetailedView({ tripId }) {
                 Current Speed
               </Typography>
               <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {Math.round(metrics.currentSpeed || 0)} km/h
+                {metrics.currentSpeed !== null && metrics.currentSpeed !== undefined && !isNaN(metrics.currentSpeed) ? `${Math.round(metrics.currentSpeed)} km/h` : '-'}
               </Typography>
             </Grid>
 
@@ -73,7 +73,7 @@ export default function TripDetailedView({ tripId }) {
                 Progress
               </Typography>
               <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                {Math.round(metrics.progress || 0)}%
+                {metrics.progress !== null && metrics.progress !== undefined && !isNaN(metrics.progress) ? `${Math.round(metrics.progress)}%` : '-'}
               </Typography>
             </Grid>
           </Grid>

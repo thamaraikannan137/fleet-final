@@ -23,7 +23,7 @@ export default function FleetOverview() {
   const statsCards = [
     {
       title: 'Total Trips',
-      value: fleetMetrics.totalTrips || 0,
+      value: isNaN(fleetMetrics.totalTrips) ? 0 : (fleetMetrics.totalTrips || 0),
       icon: <DirectionsCar />,
       color: '#7367F0',
       gradient: 'linear-gradient(135deg, #7367F0 0%, #9E95F5 100%)',
@@ -31,7 +31,7 @@ export default function FleetOverview() {
     },
     {
       title: 'Active Trips',
-      value: fleetMetrics.activeTrips || 0,
+      value: isNaN(fleetMetrics.activeTrips) ? 0 : (fleetMetrics.activeTrips || 0),
       icon: <TrendingUp />,
       color: '#00CFE8',
       gradient: 'linear-gradient(135deg, #00CFE8 0%, #1CE7FF 100%)',
@@ -39,7 +39,7 @@ export default function FleetOverview() {
     },
     {
       title: 'Completed',
-      value: fleetMetrics.completedTrips || 0,
+      value: isNaN(fleetMetrics.completedTrips) ? 0 : (fleetMetrics.completedTrips || 0),
       icon: <CheckCircle />,
       color: '#28C76F',
       gradient: 'linear-gradient(135deg, #28C76F 0%, #48DA89 100%)',
@@ -47,7 +47,7 @@ export default function FleetOverview() {
     },
     {
       title: 'Cancelled',
-      value: fleetMetrics.cancelledTrips || 0,
+      value: isNaN(fleetMetrics.cancelledTrips) ? 0 : (fleetMetrics.cancelledTrips || 0),
       icon: <Cancel />,
       color: '#EA5455',
       gradient: 'linear-gradient(135deg, #EA5455 0%, #EE7D7E 100%)',
@@ -55,7 +55,7 @@ export default function FleetOverview() {
     },
     {
       title: 'Total Distance',
-      value: formatDistance(fleetMetrics.totalDistance || 0),
+      value: formatDistance(isNaN(fleetMetrics.totalDistance) ? 0 : (fleetMetrics.totalDistance || 0)),
       icon: <TrendingUp />,
       color: '#7367F0',
       gradient: 'linear-gradient(135deg, #9E95F5 0%, #7367F0 100%)',
@@ -63,7 +63,9 @@ export default function FleetOverview() {
     },
     {
       title: 'Avg Fuel Level',
-      value: `${fleetMetrics.avgFuelLevel || 0}%`,
+      value: (fleetMetrics.avgFuelLevel !== null && fleetMetrics.avgFuelLevel !== undefined && !isNaN(fleetMetrics.avgFuelLevel)) 
+        ? `${fleetMetrics.avgFuelLevel}%` 
+        : 'No data',
       icon: <LocalGasStation />,
       color: '#FF9F43',
       gradient: 'linear-gradient(135deg, #FF9F43 0%, #FFB976 100%)',
@@ -71,7 +73,7 @@ export default function FleetOverview() {
     },
     {
       title: 'Critical Alerts',
-      value: fleetMetrics.criticalAlerts || 0,
+      value: isNaN(fleetMetrics.criticalAlerts) ? 0 : (fleetMetrics.criticalAlerts || 0),
       icon: <Warning />,
       color: '#EA5455',
       gradient: 'linear-gradient(135deg, #EA5455 0%, #EE7D7E 100%)',
@@ -79,7 +81,7 @@ export default function FleetOverview() {
     },
     {
       title: 'Vehicles Moving',
-      value: fleetMetrics.vehiclesMoving || 0,
+      value: isNaN(fleetMetrics.vehiclesMoving) ? 0 : (fleetMetrics.vehiclesMoving || 0),
       icon: <DirectionsCar />,
       color: '#00CFE8',
       gradient: 'linear-gradient(135deg, #00CFE8 0%, #1CE7FF 100%)',
@@ -104,7 +106,7 @@ export default function FleetOverview() {
         </Box>
         <Box sx={{ display: 'flex', gap: 1.5 }}>
           <Chip 
-            label={`${fleetMetrics.completionRate || 0}% Completion`}
+            label={`${isNaN(fleetMetrics.completionRate) ? 0 : (fleetMetrics.completionRate || 0)}% Completion`}
             sx={{
               bgcolor: 'rgba(40, 199, 111, 0.12)',
               color: '#28C76F',
@@ -113,7 +115,7 @@ export default function FleetOverview() {
             }}
           />
           <Chip 
-            label={`${fleetMetrics.progress50Plus || 0} trips 50%+`}
+            label={`${isNaN(fleetMetrics.progress50Plus) ? 0 : (fleetMetrics.progress50Plus || 0)} trips 50%+`}
             sx={{
               bgcolor: 'rgba(0, 207, 232, 0.12)',
               color: '#00CFE8',

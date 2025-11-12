@@ -6,6 +6,7 @@
  * Format distance
  */
 export function formatDistance(km) {
+  if (km === null || km === undefined || isNaN(km)) return '-';
   if (km >= 1000) {
     return `${(km / 1000).toFixed(1)}k km`;
   }
@@ -16,6 +17,7 @@ export function formatDistance(km) {
  * Format duration
  */
 export function formatDuration(minutes) {
+  if (minutes === null || minutes === undefined || isNaN(minutes)) return '-';
   if (minutes < 60) {
     return `${Math.round(minutes)}m`;
   }
@@ -55,6 +57,7 @@ export function formatTime(timestamp) {
  * Format percentage
  */
 export function formatPercentage(value) {
+  if (value === null || value === undefined || isNaN(value)) return '-';
   return `${Math.round(value)}%`;
 }
 
@@ -62,6 +65,7 @@ export function formatPercentage(value) {
  * Format speed
  */
 export function formatSpeed(kmh) {
+  if (kmh === null || kmh === undefined || isNaN(kmh)) return '-';
   return `${Math.round(kmh)} km/h`;
 }
 

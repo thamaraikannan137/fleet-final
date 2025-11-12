@@ -35,7 +35,13 @@ export class MetricsCalculator {
     }
 
     // Calculate distance traveled
-    const distance = latestEvent?.distance_travelled_km || 0;
+    // For completed trips, use total_distance_km from trip_completed event
+    let distance = 0;
+    if (status === 'completed' && latestEvent?.total_distance_km !== undefined) {
+      distance = latestEvent.total_distance_km;
+    } else {
+      distance = latestEvent?.distance_travelled_km || 0;
+    }
 
     // Calculate duration
     const startEvent = events.find(e => e.event_type === 'trip_started');
@@ -56,11 +62,17 @@ export class MetricsCalculator {
     // Current speed
     const currentSpeed = latestEvent?.movement?.speed_kmh || 0;
 
-    // Fuel level
-    const fuelLevel = latestEvent?.telemetry?.fuel_level_percent || 
-                     (eventTypes.has('refueling_completed') 
-                       ? events.find(e => e.event_type === 'refueling_completed')?.fuel_level_after_refuel 
-                       : 50);
+    // Fuel level - find the most recent event with telemetry data
+    let fuelLevel = null; // null means no data available
+    // First, check for the most recent telemetry event
+    const latestTelemetryEvent = [...events].reverse().find(e => e.telemetry?.fuel_level_percent !== undefined);
+    if (latestTelemetryEvent) {
+      fuelLevel = latestTelemetryEvent.telemetry.fuel_level_percent;
+    } else if (eventTypes.has('refueling_completed')) {
+      // If no telemetry but there's a refueling event, use that
+      const refuelEvent = [...events].reverse().find(e => e.event_type === 'refueling_completed');
+      fuelLevel = refuelEvent?.fuel_level_after_refuel || null;
+    }
 
     // Battery level
     const batteryLevel = latestEvent?.device?.battery_level || 100;
@@ -106,10 +118,15 @@ export class MetricsCalculator {
     // Active alerts count
     const totalAlerts = tripsArray.reduce((sum, t) => sum + t.alerts.length, 0);
 
-    // Average fuel level
-    const avgFuelLevel = tripsArray.length > 0
-      ? tripsArray.reduce((sum, t) => sum + t.fuelLevel, 0) / tripsArray.length
-      : 0;
+    // Average fuel level (only for trips with fuel data)
+    const tripsWithFuel = tripsArray.filter(t => 
+      t.fuelLevel !== null && 
+      t.fuelLevel !== undefined && 
+      !isNaN(t.fuelLevel)
+    );
+    const avgFuelLevel = tripsWithFuel.length > 0
+      ? tripsWithFuel.reduce((sum, t) => sum + t.fuelLevel, 0) / tripsWithFuel.length
+      : null;
 
     // Critical alerts (speed violations, low fuel, signal loss)
     const criticalAlerts = tripsArray.reduce((count, trip) => {
@@ -133,7 +150,7 @@ export class MetricsCalculator {
       totalDistance: Math.round(totalDistance),
       totalAlerts,
       criticalAlerts,
-      avgFuelLevel: Math.round(avgFuelLevel),
+      avgFuelLevel: avgFuelLevel !== null ? Math.round(avgFuelLevel) : null,
       vehiclesMoving,
       completionRate: totalTrips > 0 ? (completedTrips / totalTrips * 100).toFixed(1) : 0
     };

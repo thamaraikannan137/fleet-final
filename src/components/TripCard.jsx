@@ -24,7 +24,10 @@ export default function TripCard({ tripId }) {
 
   if (!tripMetadata) return null;
 
-  const progressChartConfig = getTripProgressChartConfig(metrics.progress || 0, tripMetadata.name);
+  const progressChartConfig = getTripProgressChartConfig(
+    isNaN(metrics.progress) ? 0 : (metrics.progress || 0), 
+    tripMetadata.name
+  );
 
   const getProgressColor = (status) => {
     if (status === 'completed') return '#28C76F';
@@ -77,12 +80,12 @@ export default function TripCard({ tripId }) {
               Progress
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 700, color: 'text.primary' }}>
-              {Math.round(metrics.progress || 0)}%
+              {metrics.progress !== null && metrics.progress !== undefined && !isNaN(metrics.progress) ? `${Math.round(metrics.progress)}%` : '-'}
             </Typography>
           </Box>
           <LinearProgress
             variant="determinate"
-            value={metrics.progress || 0}
+            value={isNaN(metrics.progress) ? 0 : (metrics.progress || 0)}
             sx={{
               height: 8,
               borderRadius: 1,
@@ -202,7 +205,7 @@ export default function TripCard({ tripId }) {
                   Fuel
                 </Typography>
                 <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>
-                  {Math.round(metrics.fuelLevel || 0)}%
+                  {metrics.fuelLevel !== null && metrics.fuelLevel !== undefined && !isNaN(metrics.fuelLevel) ? `${Math.round(metrics.fuelLevel)}%` : 'No data'}
                 </Typography>
               </Box>
             </Box>
@@ -239,7 +242,7 @@ export default function TripCard({ tripId }) {
                   Battery
                 </Typography>
                 <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>
-                  {Math.round(metrics.batteryLevel || 0)}%
+                  {metrics.batteryLevel !== null && metrics.batteryLevel !== undefined && !isNaN(metrics.batteryLevel) ? `${Math.round(metrics.batteryLevel)}%` : '-'}
                 </Typography>
               </Box>
             </Box>
